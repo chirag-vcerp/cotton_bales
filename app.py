@@ -9,7 +9,6 @@ from werkzeug.utils import secure_filename
 from pdf2image import convert_from_bytes
 from openai import OpenAI
 from dotenv import load_dotenv
-from textractor import Textractor
 
 load_dotenv()
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
@@ -18,7 +17,6 @@ app = Flask(__name__)
 CORS(app)
 
 # Set up Textractor
-extractor = Textractor(profile_name="chirag16")
 textract = boto3.client('textract')
 # OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
