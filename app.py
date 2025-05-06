@@ -12,17 +12,27 @@ from dotenv import load_dotenv
 
 load_dotenv()
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_REGION = os.getenv("AWS_REGION")
+AWS_PROFILE = os.getenv("AWS_PROFILE", "default")  # Default profile if not provided
 
 app = Flask(__name__)
 CORS(app)
 
+
 # Set up Textractor
-textract = boto3.client(
-    'textract',
-    aws_access_key_id='your-access-key-id',
-    aws_secret_access_key='your-secret-access-key',
-    region_name='us-east-1'
-)
+if AWS_PROFILE:
+    session = boto3.Session(profile_name=AWS_PROFILE)
+else:
+    session = boto3.Session(
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name=AWS_REGION
+    )
+
+textract = session.client('textract')
 
 # OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
