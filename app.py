@@ -17,7 +17,13 @@ app = Flask(__name__)
 CORS(app)
 
 # Set up Textractor
-textract = boto3.client('textract', region_name='us-east-1')
+textract = boto3.client(
+    'textract',
+    aws_access_key_id='your-access-key-id',
+    aws_secret_access_key='your-secret-access-key',
+    region_name='us-east-1'
+)
+
 # OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
 
